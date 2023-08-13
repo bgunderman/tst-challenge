@@ -15,24 +15,6 @@ object Problem1 extends App {
 // between rate groups and rates (A rate group is made up of many rates, but a rate can only belong to a
 // single rate group) Some examples of rate groups are: Standard, Military, Senior, and Promotion.
 
-  val inputRates = Seq(
-    Rate("M1", "Military"),
-    Rate("M2", "Military"),
-    Rate("S1", "Senior"),
-    Rate("S2", "Senior")
-  )
-
-  val inputPrices = Seq(
-    CabinPrice("CA", "M1", 200.00),
-    CabinPrice("CA", "M2", 250.00),
-    CabinPrice("CA", "S1", 225.00),
-    CabinPrice("CA", "S2", 260.00),
-    CabinPrice("CB", "M1", 230.00),
-    CabinPrice("CB", "M2", 260.00),
-    CabinPrice("CB", "S1", 245.00),
-    CabinPrice("CB", "S2", 270.00)
-  )
-
   def getBestGroupPrices(
       rates: Seq[Rate],
       prices: Seq[CabinPrice]
@@ -40,6 +22,7 @@ object Problem1 extends App {
     val rateMap = rates.map(x => x.rateCode -> x.rateGroup).toMap
 
     prices
+      .filter(price => rateMap.contains(price.rateCode))
       .groupBy(x => rateMap(x.rateCode) -> x.cabinCode)
       .flatMap { case ((group, cabinCode), values) =>
         values
@@ -55,25 +38,11 @@ object Problem1 extends App {
   }
 
   case class Rate(rateCode: String, rateGroup: String)
-
   case class CabinPrice(cabinCode: String, rateCode: String, price: BigDecimal)
-
   case class BestGroupPrice(
       cabinCode: String,
       rateCode: String,
       price: BigDecimal,
       rateGroup: String
   )
-
-  val res = getBestGroupPrices(inputRates, inputPrices)
-
-  res.foreach(println)
-
-//output should be
-
-// BestGroupPrice(CA, M1, 200.00, Military)
-// BestGroupPrice(CA, S1, 225.00, Senior)
-// BestGroupPrice(CB, M1, 230.00, Military)
-// BestGroupPrice(CB, S1, 245.00, Senior)
-
 }
