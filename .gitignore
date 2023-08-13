@@ -5,6 +5,7 @@ target
 /.idea_modules
 /.classpath
 /.project
+/.project/.bloop
 /.settings
 /.metals
 /.bloop
